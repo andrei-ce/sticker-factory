@@ -1,4 +1,6 @@
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -26,6 +28,13 @@ public class App {
         //System.out.println(movieList.get(0));
 
         for (Map<String,String> movie : movieList) {
+          //generate images
+          InputStream inputStream = new URL(movie.get("image")).openStream();
+          String fileName = movie.get("title")+".png";
+          StickerFactory stickerFactory = new StickerFactory();
+          stickerFactory.create(inputStream, fileName);
+
+          //console print logic
           System.out.println("============================================");
           System.out.println(movie.get("title"));
           System.out.println(movie.get("image"));
