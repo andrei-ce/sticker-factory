@@ -24,20 +24,20 @@ public class App {
         JsonParser jsonParser = new JsonParser();
         List<Map<String, String>> movieList = jsonParser.parse(responseBodyString);
         
-      //Manipulate & print
-        //System.out.println(movieList.get(0));
+      //Print & create movie images
+        //initialize instance of Class outside loop
+        StickerFactory stickerFactory = new StickerFactory();
 
         for (Map<String,String> movie : movieList) {
           //generate images
           InputStream inputStream = new URL(movie.get("image")).openStream();
-          String fileName = movie.get("title")+".png";
-          StickerFactory stickerFactory = new StickerFactory();
-          stickerFactory.create(inputStream, fileName);
+          String movieTitle = movie.get("title");
+          
+          stickerFactory.create(inputStream, movieTitle+".png");
 
           //console print logic
           System.out.println("============================================");
-          System.out.println(movie.get("title"));
-          System.out.println(movie.get("image"));
+          System.out.println(movieTitle);
           
           double roundedRating = Double.parseDouble(movie.get("imDbRating"));
           String starUnicode = "\uD83C\uDF1F";
