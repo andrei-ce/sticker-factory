@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -35,8 +36,12 @@ public class StickerFactory {
     graphics.setColor(customColor);
 
     //write a new funny subtitle
-    graphics.drawString("BOM DIA GRUPO", 100, newHeight - 100);
-    
+    String subtitle = "BOM DIA GRUPO";
+    FontMetrics metrics = graphics.getFontMetrics(customFont);
+    int x = (width - metrics.stringWidth(subtitle)) / 2;
+    int y = newHeight - 70;
+    graphics.drawString(subtitle, x, y);
+
     // Create the directory if it doesn't exist
     File outputDirectory = new File("output_storage");
     if (!outputDirectory.exists()) {
