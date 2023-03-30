@@ -1,50 +1,50 @@
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Map;
+
 public class App {
 
     public static void main(String[] args) throws Exception {
 
       //GET top movies from= imdb
         String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopMovies.json";
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .GET()
-                .uri(URI.create(url))
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        String responseBodyString = response.body();
+        ContentExtractor extractor = new ContentExtractorIMDB();
         
-      //Parse (Title, image, rating)
-        JsonParser jsonParser = new JsonParser();
-        List<Map<String, String>> movieList = jsonParser.parse(responseBodyString);
+        // String url = "https://api.nasa.gov/planetary/apod?api_key=4oJl8Uksfr9g5NQt5iZ7ODa61KqoUxgG6PZtXSpF&start_date=2023-03-27&end_date=2023-03-29";
+        // ContentExtractor extractor = new ContentExtractorNASA();
+        
+        var client = new Client();
+        String jsonAsString = client.fetchData(url);
+        
+        //Parse (Title, image, rating)
+        
+        List<Content> contentList = extractor.extractContentList(jsonAsString);
         
       //Print & create movie images
         //initialize instance of Class outside loop
         StickerFactory stickerFactory = new StickerFactory();
 
-        for (Map<String,String> movie : movieList) {
+        for (int i = 0; i < 3; i++) {
+          Content contentItem = contentList.get(i);
           //generate images
-          InputStream inputStream = new URL(movie.get("image")).openStream();
-          String movieTitle = movie.get("title");
+          String image = contentItem.getImageURL();
+          String title = contentItem.getTitle();
           
-          stickerFactory.create(inputStream, movieTitle+".png");
+          InputStream inputStream = new URL(image).openStream();
+          stickerFactory.create(inputStream, title + ".png");
 
           //console print logic
           System.out.println("============================================");
-          System.out.println(movieTitle);
+          System.out.println(title);
           
-          double roundedRating = Double.parseDouble(movie.get("imDbRating"));
-          String starUnicode = "\uD83C\uDF1F";
-          for (int i = 1; i < roundedRating; i++) {
-            System.out.print(starUnicode);
-          }
-          System.out.println("["+roundedRating+"]");
+          // ---This was for the IMDB API only---
+          // double roundedRating = Double.parseDouble(contentItem.get("imDbRating"));
+          // String starUnicode = "\uD83C\uDF1F";
+          // for (int j = 1; i < roundedRating; i++) {
+          //   System.out.print(starUnicode);
+          // }
+          // System.out.println("["+roundedRating+"]");
+          // ---This was for the IMDB API only---
           System.out.println("============================================");
         }
     }

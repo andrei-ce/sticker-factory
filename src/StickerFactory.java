@@ -35,7 +35,7 @@ public class StickerFactory {
     graphics.setColor(customColor);
 
     //write a new funny subtitle
-    graphics.drawString("MUITO BOM", 100, newHeight - 100);
+    graphics.drawString("BOM DIA GRUPO", 100, newHeight - 100);
     
     // Create the directory if it doesn't exist
     File outputDirectory = new File("output_storage");
