@@ -27,8 +27,8 @@ public class App {
         for (int i = 0; i < 3; i++) {
           Content contentItem = contentList.get(i);
           //generate images
-          String image = contentItem.getImageURL();
-          String title = contentItem.getTitle();
+          String image = contentItem.imageURL();
+          String title = contentItem.title();
           
           InputStream inputStream = new URL(image).openStream();
           stickerFactory.create(inputStream, title + ".png");
